@@ -72,9 +72,10 @@ endif
 "colorscheme default
 "colorscheme morning
 "colorscheme desert
-colorscheme monokai
+"colorscheme monokai
+"colorscheme github
 "colorscheme molokai
-"colorscheme dante
+colorscheme dante
 set number
 
 highlight lineNr term=bold cterm=NONE ctermfg=Blue ctermbg=DarkGrey gui=NONE guifg=DarkGrey guibg=NONE
