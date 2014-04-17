@@ -130,3 +130,12 @@ nnoremap k gk
 "use monokai theme
 "let g:molokai_original = 1
 "let g:rehash256 = 1
+
+"change the shape of cursor in insert mode.
+"It is applied only for Gnome-terminal only
+if has("autocmd")
+    au InsertEnter * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape ibeam"
+    au InsertLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
+    au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape ibeam"
+endif
+
