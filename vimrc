@@ -79,8 +79,6 @@ endif
 colorscheme kolor
 set number
 
-highlight lineNr term=bold cterm=NONE ctermfg=Blue ctermbg=DarkGrey gui=NONE guifg=DarkGrey guibg=NONE
-
 "when enter just move the cursor 2 spaces
 set smartindent 
 set shiftwidth=4
@@ -108,10 +106,6 @@ filetype plugin indent on
 syntax on
 highlight lineNr term=bold cterm=NONE ctermfg=Blue ctermbg=DarkGrey gui=NONE guifg=DarkGrey guibg=NONE
 
-"this is for turning off pylint when use python-mode
-"It is obsolate. Dont use python-mode anymore
-"let g:pymode_lint_write = 0 "turn off running pylint
-
 let Tlist_Ctags_Cmd = "/usr/bin/ctags"
 let Tlist_WinWidth = 30
 "press F4 to toggle the list of functions
@@ -128,9 +122,8 @@ hi CursorLine term=none cterm=none ctermbg=0
 nnoremap j gj
 nnoremap k gk
 
-"use monokai theme
-"let g:molokai_original = 1
-"let g:rehash256 = 1
+"map <F5> to toggle spell checking
+map <F5> :setlocal spell! spelllang=en_us<CR>
 
 "change the shape of cursor in insert mode.
 "It is applied only for Gnome-terminal only
