@@ -125,6 +125,9 @@ nnoremap k gk
 "map <F5> to toggle spell checking
 map <F5> :setlocal spell! spelllang=en_us<CR>
 
+"map <Ctrl + Space> to replace <Ctrl+x><Ctrl+O> of Omni Complete
+inoremap <C-@> <C-x><C-o>
+
 "change the shape of cursor in insert mode.
 "It is applied only for Gnome-terminal only
 "It is equivalent to use gconf-editor in Gnome
