@@ -29,6 +29,7 @@ This plugin provides:
 |latex-box-commands|                    COMMANDS
 |latex-box-commands-compilation|        Compilation
 |latex-box-commands-viewing|            Viewing
+|latex-box-commands-folding|            Folding
 |latex-box-commands-motion|             Motion
 
 |latex-box-motion|                      MOTION
@@ -37,6 +38,7 @@ This plugin provides:
 |latex-box-mappings-compilation|        Compilation
 |latex-box-mappings-insertion|          Insertion
 |latex-box-mappings-viewing|            Viewing
+|latex-box-mappings-folding|            Folding
 |latex-box-mappings-motion|             Motion
 
 |latex-box-settings|                    SETTINGS
@@ -273,7 +275,21 @@ Viewing ~
 
 *:LatexView*
         Launch viewer on output file.
+        Takes optional arguments, separated by whitespaces, to be passed to the viewer.
+        For example, to open the viewer at a specific page and line if SyncTeX is used.
+        See the FAQ below for an application to SumatraPDF for forward searching.
         See |g:LatexBox_output_type| and |g:LatexBox_viewer|.
+
+------------------------------------------------------------------------------
+
+                                                  *latex-box-commands-folding*
+Folding ~
+
+*:LatexFold*
+        Recalculate the folds in the file.
+        This is especially useful if you are editing a large file with
+        automatic folding disabled for performance reasons.
+        See |g:LatexBox_fold_automatic|.
 
 ------------------------------------------------------------------------------
 
@@ -283,6 +299,8 @@ Motion ~
 *:LatexTOC*
         Open a table of contents.
         Use Enter to navigate to selected entry.
+        See |g:LatexBox_split_type|.
+        See |g:LatexBox_split_length|.
         See |g:LatexBox_split_width|.
         See |g:LatexBox_split_side|.
         See |g:LatexBox_split_resize|.
@@ -335,6 +353,14 @@ Viewing ~
 
 <LocalLeader>lv                                                   |:LatexView|
         View output file.
+
+------------------------------------------------------------------------------
+
+                                                  *latex-box-mappings-folding*
+Folding ~
+
+<LocalLeader>lf                                                   |:LatexFold|
+        Recalculate the folds.
 
 ------------------------------------------------------------------------------
 
@@ -549,6 +575,12 @@ Compilation ~
                 empty and becomes the active window.
         2       The quickfix window is opened automatically if not
                 empty but the cursor stays in the current window.
+        3       The quickfix window is opened automatically if not
+                empty and becomes the active window.  Quickfix window is not
+                opened on warnings, only on errors.
+        4       The quickfix window is opened automatically if not
+                empty but the cursor stays in the current window.  Quickfix
+                window is not opened on warnings, only on errors.
 
 *g:LatexBox_autojump*                           Default: 0
         Automatically jump to first error after calling latexmk.
@@ -577,23 +609,48 @@ Compilation ~
         Set output directory for build files. This overrides the global
         setting.
 
+*g:LatexBox_jobname*                            Default: ""
+        Sets the name of the output build files.
+
 ------------------------------------------------------------------------------
 
                                                   *latex-box-settings-windows*
 Vim Windows ~
 
+For different settings, change the .vimrc so that a more comfortable 
+global variable is used. For example, if one prefers horizontal splits 
+(non-default, featured in screenshot), consider the following lines in 
+the .vimrc:
+
+>
+              if s:extfname ==? "tex" 
+                ...
+                let |g:LatexBox_split_type| = "new"
+                ...
+              end if
+<        
+
+*g:LatexBox_split_type*                 Default: "vnew"
+        The type of split for the Table of Contents. Use "new" for horizontal,
+        "vnew" for vertical. Note that these are the general commands for 
+        splitting--more info can be found via :help new.
+
+*g:LatexBox_split_length*               Default: 15
+        Length of horizontally split vim windows. Used for the table of contents.
+
 *g:LatexBox_split_width*                Default: 30
         Width of vertically split vim windows. Used for the table of contents.
 
-*g:LatexBox_split_side*                 Default: "leftabove"
-        On which side the vertically split windows appear. Used for the table
-        of contents. Set to "rightbelow" to have it on the right side.
+*g:LatexBox_split_side*                 Default: "aboveleft"
+        On which side the split windows appear. Above for horizontal splits
+        and left for vertical splits. Used for the table of contents. 
+        Set to "belowright" to have it on the below/right side.
 
 *g:LatexBox_split_resize*               Default: 0
         Resize vim/gvim when opening new windows. Used for the table of
-        contents. If set to 1, it will add/remove |g:LatexBox_split_width| to
-        the number of columns dynamically, in order to keep the latex file open
-        with the desired width.
+        contents. If set to 1, it will add/remove |g:LatexBox_split_width| or
+        |g:LatexBox_split_length| to the number of columns dynamically, 
+        in order to keep the latex file open with the desired dimension.
 
 *g:LatexBox_toc_hidehelp*               Default: 0
         If enabled, the help info at the bottom of the TOC window will be
@@ -612,11 +669,16 @@ turned on and a latex document is opened, the document is parsed once in order
 to define the highest fold level based on which parts and sections should be
 folded.
 
-*g:LatexBox_Folding*                    Default: undefined
+*g:LatexBox_Folding*                    Default: 0
         Set to 1 to activate LaTeX structure folding. Please note that any
         modeline that would set |foldmethod| to something else than
         'fold-expr' will disable the function. The same goes for |foldexpr|.
         Set this variable in your .vimrc
+
+*g:LatexBox_fold_text*                  Default: 1
+        Turn on/off LaTeX enhenced foldtext() function.  Turn on this option
+        makes LaTeX-Box override the |foldtext| option.  Turn off if you want
+        to set your own |foldtext|.
 
 *g:LatexBox_fold_preamble*              Default: 1
         Turn on/off folding of preamble
@@ -658,6 +720,16 @@ folded.
 *g:LatexBox_fold_toc_levels*            Default: 1
         Set number of section levels to fold in TOC.
 
+*g:LatexBox_fold_automatic*             Default: 1
+        Turn on/off automatic calculation of folds.
+        By default LaTeX-Box recalculates the folds every time you exit insert
+        mode. However for large files this can be a rather slow process: a
+        couple of seconds to 10s of seconds.
+        If this option is set to 0 the folding code is still enabled but isn't
+        activated by default. Hence you need to manually tell vim to
+        recalculate folds every time you find it apropriate.
+        You can recalculate the folds using <LocalLeader>lf or |:LatexFold|
+
 ==============================================================================
 
 INDENTATION                                                 *latex-box-indent*
@@ -693,6 +765,46 @@ A: Add the following line in your ~/.latexmkrc file: >
                         \ = "-pdflatex='pdflatex -synctex=1 \%O \%S'"
 
 <  which can be added to your .vimrc file as desired.
+
+Q: How can I use SyncTeX with the SumatraPDF viewer?
+
+A: To enable SyncTeX add the following LatexBox settings to your ~/.vimrc file: >
+
+        let g:LatexBox_latexmk_options =
+          \ '-pdflatex="pdflatex -synctex=1 %O %S"'
+
+   To enable Inverse Search, that is, jumping from a position in the PDF
+   document to the TeX file, add the following LatexBox settings to your
+   ~/.vimrc file: >
+
+        let g:LatexBox_latexmk_options =
+          \ '-pdflatex="pdflatex -synctex=1 %O %S"'
+
+        let g:LatexBox_viewer = 'SumatraPDF -reuse-instance -inverse-search '
+          \ . '"gvim --servername ' . v:servername
+          \ . ' --remote-send \"^<C-\^>^<C-n^>'
+          \ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
+          \ . ':call remote_foreground('''.v:servername.''')^<CR^>\""'
+
+<   The above approach inspired by remoteOpen.vim from LaTeX-suite. The naive
+   try, >
+
+        ..\ "gvim +\%l \%f"
+
+<   changes the current work dir to the dir of the viewer (see
+   http://vim.1045645.n5.nabble.com/autochdir-td1140014.html) and produces
+   a lot of error messages.
+
+   To enable Forward Search, that is, jumping from a position in the TeX file
+   to the PDF document, add the following mapping to your
+   ~/.vim/ftplugin/tex.vim file: >
+
+        nnoremap <expr><buffer> <C-F11> ':LatexView ' . '-forward-search '
+            \ . shellescape(expand('%:p')) . ' ' . line(".") . '\<CR>'
+
+<   When hitting <C-F11>, the viewer (SumatraPDF) will open the PDF document
+   at the page corresponding to the current cursor position in the TeX
+   document.
 
 Q: How can I use xelatex instead of pdflatex for some documents only?
 
