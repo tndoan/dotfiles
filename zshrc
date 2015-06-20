@@ -6,7 +6,7 @@ ZSH=$HOME/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="ys"
+ZSH_THEME="amuse"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -46,7 +46,7 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+export PATH=$PATH:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thanhnam/workspace/julia-v0.3.0/
 
 alias matlab="/usr/local/MATLAB/R2012a/bin/matlab"
-alias julia='~/workspace/julia/julia'
+#alias julia='~/workspace/julia-v0.3.0/julia'
