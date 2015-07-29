@@ -29,3 +29,14 @@ for file in $files; do
     echo "Creating symlink to $file in home directory."
     ln -s $dir/$file ~/.$file
 done
+
+# install pathogen to manage plugins in Vim
+mkdir -p $dir/vim/autoload $dir/vim/bundle && \
+curl -LSso $dir/vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+
+# TODO: clone git repo of oh-my-zsh and vim plugins
+sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" # install oh-my-zsh
+cd vim/bundle
+git clone https://github.com/JuliaLang/julia-vim.git
+git clone https://github.com/LaTeX-Box-Team/LaTeX-Box.git
+git clone --recursive https://github.com/davidhalter/jedi-vim.git
