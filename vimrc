@@ -128,4 +128,48 @@ map <F5> :setlocal spell! spelllang=en_us<CR>
 "map <Ctrl + Space> to replace <Ctrl+x><Ctrl+O> of Omni Complete
 inoremap <C-@> <C-x><C-o>
 
+" create a virtual verital line at position of 80
 set colorcolumn=80
+
+" keep the cursor always at the middle line of screen
+set scrolloff=10
+
+" if the current line begin with \begin{tag}, return \end{tag}
+function GetCloseTag()
+    let line = getline('.')
+    let words = split(line) 
+    " if line is empty or contain all space, return empty string
+    if len(words) == 0 
+        return ""
+    end
+    let tags = split(words[0], "{")
+    if tags[0] == "\\begin"
+        let tagname = split(tags[1], "}")
+        let endtag = "\\end{" . tagname[0] . "}"
+        return endtag
+    end
+    return ""
+endfunction
+
+" 
+function AutoCloseTag()
+    let insert_tag = GetCloseTag()
+    if insert_tag == "" 
+        " it is the normal string. Do nothing
+        return "\<CR>"
+    else
+        " 
+        return "\<CR>" . insert_tag . "\<Esc>O"
+    end
+endfunction
+
+" If we open tex file, change the behavior of <CR> to check situation.
+" If current line begin with begin environment, so when use hit enter, 
+" automatically insert close environment and put cursor between.
+" For example, | is the location of cursor, use hit enter
+"   \begin{itemize}|
+" We change to
+"   \begin{itemize}
+"       |
+"   \end{itemize}
+autocmd BufNewFile,BufRead *.tex inoremap <CR> <C-R>=AutoCloseTag()<CR>
