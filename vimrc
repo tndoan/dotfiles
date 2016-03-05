@@ -173,3 +173,6 @@ endfunction
 "       |
 "   \end{itemize}
 autocmd BufNewFile,BufRead *.tex inoremap <CR> <C-R>=AutoCloseTag()<CR>
+
+" highlight syntax of following language in markdown files
+let g:markdown_fenced_languages = ['html', 'vim', 'ruby', 'python', 'bash=sh', 'julia']
