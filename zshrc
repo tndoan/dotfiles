@@ -46,7 +46,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=$PATH:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thanhnam/workspace/julia-v0.3.0/
+export PATH=$PATH:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 
-alias matlab="/usr/local/MATLAB/R2012a/bin/matlab"
-#alias julia='~/workspace/julia-v0.3.0/julia'
+alias julia='~/workspace/julia/julia'
